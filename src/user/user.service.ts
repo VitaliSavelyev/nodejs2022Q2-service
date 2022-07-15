@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
-  CreateUserDto,
-  UpdatePasswordDto,
+  CreateUserInt,
+  UpdatePasswordInt,
   User,
   UserReq,
 } from '../interfaces/interfaces';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -14,19 +15,17 @@ export class UserService {
   }
 
   public async getUserById(id: string): Promise<UserReq> {
-    const user: User | undefined = this.users.find(
-      (user: User) => user.id === id,
-    );
-    return this.getUserReq(user);
+    const idxUser = this.isUserAvailable(id);
+    return this.getUserReq(this.users[idxUser]);
   }
 
-  public async createUser(createUserDto: CreateUserDto): Promise<UserReq> {
+  public async createUser(createUserDto: CreateUserInt): Promise<UserReq> {
     const createdUser: User = {
-      id: '',
+      id: uuidv4(),
       login: createUserDto.login,
       version: 1,
-      createdAt: new Date().getDate(),
-      updatedAt: new Date().getDate(),
+      createdAt: +Date.now(),
+      updatedAt: +Date.now(),
       password: createUserDto.password,
     };
     this.users.push(createdUser);
@@ -34,35 +33,35 @@ export class UserService {
   }
 
   public async updateUser(
-    updateUserDto: UpdatePasswordDto,
+    updateUserDto: UpdatePasswordInt,
     id: string,
   ): Promise<UserReq> {
-    if (!this.users.some((user: User) => user.id === id)) {
-      return null;
-    }
-    const idxUser = this.users.findIndex((user) => user.id === id);
+    const idxUser = this.isUserAvailable(id);
     const updatedUser: User = {
       ...this.users[idxUser],
       password: updateUserDto.newPassword,
-      updatedAt: new Date().getDate(),
-      version: this.users[idxUser].version++,
+      updatedAt: +Date.now(),
+      version: this.users[idxUser].version + 1,
     };
     this.users.push(updatedUser);
     return this.getUserReq(updatedUser);
   }
 
   public async deleteUser(id: string): Promise<void> {
-    let deletedUser: User | null = null;
-    this.users = this.users.filter((user: User) => {
-      if (user.id === id) {
-        deletedUser = user;
-      }
-      return user.id !== id;
-    });
+    const idxUser = this.isUserAvailable(id);
+    this.users.splice(idxUser, 1);
   }
 
   private getUserReq(user: User): UserReq {
     const { login, id, version, createdAt, updatedAt } = user;
     return { login, id, version, createdAt, updatedAt };
+  }
+
+  private isUserAvailable(id: string): number {
+    const idxUser = this.users.findIndex((user) => user.id === id);
+    if (idxUser === -1) {
+      throw new HttpException('Пользователь не найдены', HttpStatus.NOT_FOUND);
+    }
+    return idxUser;
   }
 }

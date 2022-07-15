@@ -9,17 +9,15 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import {
-  CreateUserDto,
-  UpdatePasswordDto,
-  UserReq,
-} from 'src/interfaces/interfaces';
+import { UserReq } from 'src/interfaces/interfaces';
 import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get('user')
+  @Get()
   @HttpCode(HttpStatus.OK)
   getUsers(): Promise<UserReq[]> {
     return this.userService.getUsers();
@@ -31,16 +29,16 @@ export class UserController {
     return this.userService.getUserById(id);
   }
 
-  @Post('user')
+  @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() createUserDto: CreateUserDto): Promise<UserReq> {
-    return this.userService.createUser(createUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserReq> {
+    return await this.userService.createUser(createUserDto);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   updateUser(
-    @Body() upadteUserDto: UpdatePasswordDto,
+    @Body() upadteUserDto: UpdateUserDto,
     @Param('id') id: string,
   ): Promise<UserReq> {
     return this.userService.updateUser(upadteUserDto, id);

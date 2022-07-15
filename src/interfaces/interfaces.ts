@@ -43,12 +43,12 @@ export interface FavoritesResponse {
   tracks: Track[];
 }
 
-export interface CreateUserDto {
+export interface CreateUserInt {
   login: string;
   password: string;
 }
 
-export interface UpdatePasswordDto {
+export interface UpdatePasswordInt {
   oldPassword: string; // previous password
   newPassword: string; // new password
 }
