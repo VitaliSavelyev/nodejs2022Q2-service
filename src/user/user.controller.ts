@@ -12,21 +12,21 @@ import {
 import { UserReq } from 'src/interfaces/interfaces';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatedUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getUsers(): Promise<UserReq[]> {
-    return this.userService.getUsers();
+  async getUsers(): Promise<UserReq[]> {
+    return await this.userService.getUsers();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getUser(@Param('id') id: string): Promise<UserReq> {
-    return this.userService.getUserById(id);
+  async getUser(@Param('id') id: string): Promise<UserReq> {
+    return await this.userService.getUserById(id);
   }
 
   @Post()
@@ -37,16 +37,16 @@ export class UserController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  updateUser(
-    @Body() upadteUserDto: UpdateUserDto,
+  async updateUser(
+    @Body() updatedUserDto: UpdatedUserDto,
     @Param('id') id: string,
   ): Promise<UserReq> {
-    return this.userService.updateUser(upadteUserDto, id);
+    return await this.userService.updateUser(updatedUserDto, id);
   }
 
   @Delete('id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteUser(@Param('id') id: string): Promise<void> {
-    return this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string): Promise<void> {
+    return await this.userService.deleteUser(id);
   }
 }

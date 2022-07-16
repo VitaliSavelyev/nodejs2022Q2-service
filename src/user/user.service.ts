@@ -5,7 +5,7 @@ import {
   User,
   UserReq,
 } from '../interfaces/interfaces';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -15,6 +15,7 @@ export class UserService {
   }
 
   public async getUserById(id: string): Promise<UserReq> {
+    this.isValidId(id);
     const idxUser = this.isUserAvailable(id);
     return this.getUserReq(this.users[idxUser]);
   }
@@ -36,7 +37,11 @@ export class UserService {
     updateUserDto: UpdatePasswordInt,
     id: string,
   ): Promise<UserReq> {
+    this.isValidId(id);
     const idxUser = this.isUserAvailable(id);
+    if (updateUserDto.oldPassword !== this.users[idxUser].password) {
+      throw new HttpException('Старый пароль не верен', HttpStatus.FORBIDDEN);
+    }
     const updatedUser: User = {
       ...this.users[idxUser],
       password: updateUserDto.newPassword,
@@ -48,6 +53,7 @@ export class UserService {
   }
 
   public async deleteUser(id: string): Promise<void> {
+    this.isValidId(id);
     const idxUser = this.isUserAvailable(id);
     this.users.splice(idxUser, 1);
   }
@@ -58,10 +64,17 @@ export class UserService {
   }
 
   private isUserAvailable(id: string): number {
+    this.isValidId(id);
     const idxUser = this.users.findIndex((user) => user.id === id);
     if (idxUser === -1) {
-      throw new HttpException('Пользователь не найдены', HttpStatus.NOT_FOUND);
+      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
     }
     return idxUser;
+  }
+
+  private isValidId(id: string): void {
+    if (!validate(id)) {
+      throw new HttpException('ID user не валидный', HttpStatus.BAD_REQUEST);
+    }
   }
 }

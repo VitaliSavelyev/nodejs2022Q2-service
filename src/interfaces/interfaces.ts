@@ -10,10 +10,13 @@ export interface User extends UserReq {
   password: string;
 }
 
-export interface Artist {
-  id: string; // uuid v4
+export interface ArtistReq {
   name: string;
   grammy: boolean;
+}
+
+export interface Artist extends ArtistReq {
+  id: string; // uuid v4
 }
 
 export interface Track {
