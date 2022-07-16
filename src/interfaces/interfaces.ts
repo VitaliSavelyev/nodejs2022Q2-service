@@ -19,19 +19,25 @@ export interface Artist extends ArtistReq {
   id: string; // uuid v4
 }
 
-export interface Track {
-  id: string; // uuid v4
+export interface TrackReq {
   name: string;
   artistId: string | null; // refers to Artist
   albumId: string | null; // refers to Album
   duration: number; // integer number
 }
 
-export interface Album {
+export interface Track extends TrackReq {
   id: string; // uuid v4
+}
+
+export interface AlbumReq {
   name: string;
   year: number;
   artistId: string | null; // refers to Artist
+}
+
+export interface Album extends AlbumReq {
+  id: string; // uuid v4
 }
 
 export interface Favorites {

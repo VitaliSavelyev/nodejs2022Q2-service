@@ -33,7 +33,7 @@ export class ArtistService {
     const idxArtist = this.isArtistAvailable(id);
     const updatedArtist: Artist = {
       ...this.artists[idxArtist],
-      name: updateArtistDto,
+      name: updateArtistDto.name,
       grammy: this.artists[idxArtist].grammy,
     };
     this.artists.push(updatedArtist);
