@@ -10,14 +10,7 @@ import { Album, AlbumReq, Artist } from '../interfaces/interfaces';
 import { TrackService } from '../track/track.service';
 import { FavsService } from '../favs/favs.service';
 
-const albums = [
-  // {
-  //   id: '965a56d5-eff5-4cb2-a9eb-fea6fb444b3e',
-  //   name: 'album1',
-  //   year: 1999,
-  //   artistId: '322dfd9c-fb0f-47c8-81a1-4b1fb3826eb3',
-  // },
-];
+const albums = [];
 
 @Injectable()
 export class AlbumService {

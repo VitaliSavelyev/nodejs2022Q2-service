@@ -9,15 +9,7 @@ import { v4 as uuidv4, validate } from 'uuid';
 import { Album, Track, TrackReq } from '../interfaces/interfaces';
 import { FavsService } from '../favs/favs.service';
 
-const tracks = [
-  {
-    id: 'caf3e31c-ed44-495e-864d-9337c084e0a9',
-    name: 'track1',
-    artistId: '322dfd9c-fb0f-47c8-81a1-4b1fb3826eb3',
-    albumId: '965a56d5-eff5-4cb2-a9eb-fea6fb444b3e',
-    duration: 500,
-  },
-];
+const tracks = [];
 
 @Injectable()
 export class TrackService {

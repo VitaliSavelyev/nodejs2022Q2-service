@@ -42,7 +42,6 @@ export class AlbumController {
     @Body() updatedAlbumDto: UpdateAlbumDto,
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<Album> {
-    console.log(id);
     return await this.albumService.updateAlbum(updatedAlbumDto, id);
   }
 

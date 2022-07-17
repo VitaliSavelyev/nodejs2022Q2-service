@@ -11,18 +11,7 @@ import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
 import { FavsService } from '../favs/favs.service';
 
-const artists = [
-  // {
-  //   id: '322dfd9c-fb0f-47c8-81a1-4b1fb3826eb3',
-  //   name: 'Vitali',
-  //   grammy: true,
-  // },
-  // {
-  //   id: '159f6531-1e3b-4753-a2ec-d736e00dbf08',
-  //   name: 'Kate',
-  //   grammy: true,
-  // },
-];
+const artists = [];
 
 @Injectable()
 export class ArtistService {
