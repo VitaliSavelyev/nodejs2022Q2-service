@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   Album,
   Artist,
@@ -32,6 +32,11 @@ export class FavsService {
     const isElem = this.trackService.checkTrack(id);
     if (isElem) {
       favs.tracks.push(id);
+    } else {
+      throw new HttpException(
+        'Трек не найден',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
     return isElem;
   }
@@ -40,6 +45,11 @@ export class FavsService {
     const isElem = this.artistService.checkArtist(id);
     if (isElem) {
       favs.artists.push(id);
+    } else {
+      throw new HttpException(
+        'Артист не найден',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
     return isElem;
   }
@@ -48,6 +58,11 @@ export class FavsService {
     const isElem = this.albumService.checkAlbum(id);
     if (isElem) {
       favs.albums.push(id);
+    } else {
+      throw new HttpException(
+        'Альбом не найден',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
     return isElem;
   }
