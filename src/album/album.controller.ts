@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -25,7 +26,7 @@ export class AlbumController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getAlbum(@Param('id') id: string): Promise<Album> {
+  async getAlbum(@Param('id', new ParseUUIDPipe()) id: string): Promise<Album> {
     return await this.albumService.getAlbumById(id);
   }
 
@@ -39,14 +40,17 @@ export class AlbumController {
   @HttpCode(HttpStatus.OK)
   async updateAlbum(
     @Body() updatedAlbumDto: UpdateAlbumDto,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<Album> {
+    console.log(id);
     return await this.albumService.updateAlbum(updatedAlbumDto, id);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteAlbum(@Param('id') id: string): Promise<void> {
+  async deleteAlbum(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<void> {
     return await this.albumService.deleteAlbum(id);
   }
 }

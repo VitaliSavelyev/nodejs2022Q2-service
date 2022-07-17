@@ -1,18 +1,38 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { v4 as uuidv4, validate } from 'uuid';
-import { Album, AlbumReq } from '../interfaces/interfaces';
+import { Album, AlbumReq, Artist } from '../interfaces/interfaces';
+import { TrackService } from '../track/track.service';
+import { FavsService } from '../favs/favs.service';
+
+const albums = [
+  // {
+  //   id: '965a56d5-eff5-4cb2-a9eb-fea6fb444b3e',
+  //   name: 'album1',
+  //   year: 1999,
+  //   artistId: '322dfd9c-fb0f-47c8-81a1-4b1fb3826eb3',
+  // },
+];
 
 @Injectable()
 export class AlbumService {
-  public albums = [];
+  constructor(
+    private readonly trackService: TrackService,
+    @Inject(forwardRef(() => FavsService))
+    private readonly favsServise: FavsService,
+  ) {}
   public async getAlbums(): Promise<Album[]> {
-    return this.albums;
+    return albums;
   }
 
   public async getAlbumById(id: string): Promise<Album> {
-    this.isValidId(id);
     const idxAlbum = this.isAlbumAvailable(id);
-    return this.albums[idxAlbum];
+    return albums[idxAlbum];
   }
 
   public async createAlbum(createAlbumDto: AlbumReq): Promise<Album> {
@@ -22,7 +42,7 @@ export class AlbumService {
       year: createAlbumDto.year,
       artistId: createAlbumDto.artistId,
     };
-    this.albums.push(createdAlbum);
+    albums.push(createdAlbum);
     return createdAlbum;
   }
 
@@ -30,36 +50,40 @@ export class AlbumService {
     updateAlbumDto: AlbumReq,
     id: string,
   ): Promise<Album> {
-    this.isValidId(id);
     const idxAlbum = this.isAlbumAvailable(id);
     const updatedAlbum: Album = {
-      ...this.albums[idxAlbum],
+      ...albums[idxAlbum],
       name: updateAlbumDto.name,
       year: updateAlbumDto.year,
       artistId: updateAlbumDto.artistId,
     };
-    this.albums.push(updatedAlbum);
+    albums[idxAlbum] = updatedAlbum;
     return updatedAlbum;
   }
 
   public async deleteAlbum(id: string): Promise<void> {
-    this.isValidId(id);
     const idxAlbum = this.isAlbumAvailable(id);
-    this.albums.splice(idxAlbum, 1);
+    albums.splice(idxAlbum, 1);
+    this.trackService.setAlbumAfterDelete(id);
+    this.favsServise.removedFavsAfterDeleteElem(id, 'albums');
+  }
+
+  public checkAlbum(id): Album | null {
+    const album: Album = albums.find((album) => album.id === id);
+    return album;
+  }
+
+  public setArtistAfterDelete(id: string) {
+    albums.forEach((album) => {
+      return album.artistId === id ? null : album.artistId;
+    });
   }
 
   private isAlbumAvailable(id: string): number {
-    this.isValidId(id);
-    const idxAlbum = this.albums.findIndex((user) => user.id === id);
+    const idxAlbum = albums.findIndex((album) => album.id === id);
     if (idxAlbum === -1) {
-      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
+      throw new HttpException('Альбом не найден', HttpStatus.NOT_FOUND);
     }
     return idxAlbum;
-  }
-
-  private isValidId(id: string): void {
-    if (!validate(id)) {
-      throw new HttpException('ID Album не валидный', HttpStatus.BAD_REQUEST);
-    }
   }
 }

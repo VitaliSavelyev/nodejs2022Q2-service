@@ -8,6 +8,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UserReq } from 'src/interfaces/interfaces';
 import { UserService } from './user.service';
@@ -25,7 +26,9 @@ export class UserController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async getUser(@Param('id') id: string): Promise<UserReq> {
+  async getUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<UserReq> {
     return await this.userService.getUserById(id);
   }
 
@@ -39,14 +42,16 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async updateUser(
     @Body() updatedUserDto: UpdatedUserDto,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
   ): Promise<UserReq> {
     return await this.userService.updateUser(updatedUserDto, id);
   }
 
-  @Delete('id')
+  @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  async deleteUser(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<void> {
     return await this.userService.deleteUser(id);
   }
 }
