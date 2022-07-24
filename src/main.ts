@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 import { parse } from 'yaml';
 import * as fs from 'fs/promises';
+import { ConfigService } from '@nestjs/config';
 
 dotenv.config({
   path: path.join(__dirname, '../.env'),
