@@ -37,7 +37,6 @@ export class UserEntity extends BaseEntity {
     const { id, login, createdAt, version, updatedAt } = this;
     const chargeDateCreate = createdAt.getMilliseconds();
     const chargeDateUpdate = updatedAt.getMilliseconds();
-    console.log('update', updatedAt, chargeDateUpdate);
     return {
       id,
       login,

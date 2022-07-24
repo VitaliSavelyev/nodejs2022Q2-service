@@ -17,7 +17,6 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  public users = [];
   public async getUsers(): Promise<UserReq[]> {
     const users = await this.userRepository.find();
     return users.map((user) => this.getUserReq(user));
@@ -40,7 +39,6 @@ export class UserService {
       password: createUserDto.password,
     };
     const createdUser = await this.userRepository.create(newUser);
-    console.log(createdUser);
     return (await this.userRepository.save(createdUser)).toResponse();
   }
 
