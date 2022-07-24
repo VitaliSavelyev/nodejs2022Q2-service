@@ -56,14 +56,14 @@ export class ArtistService {
       updatedArtist.grammy = updateArtistDto.grammy;
       return (await this.artistRepository.save(updatedArtist)).toResponse();
     } else {
-      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
+      throw new HttpException('Артист не найден', HttpStatus.NOT_FOUND);
     }
   }
 
   public async deleteArtist(id: string): Promise<void> {
     const result = await this.artistRepository.delete(id);
     if (result.affected === 0) {
-      throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
+      throw new HttpException('Артист не найден', HttpStatus.NOT_FOUND);
     }
   }
 
