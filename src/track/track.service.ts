@@ -16,12 +16,14 @@ export class TrackService {
     return await this.trackRepository.find();
   }
 
-  public async getTrackById(id: string): Promise<Track> {
+  public async getTrackById(id: string, favs = false): Promise<Track> {
     const track = await this.trackRepository.findOne({ where: { id } });
     if (track) {
       return track;
     } else {
-      throw new HttpException('Песня не найден', HttpStatus.NOT_FOUND);
+      if (!favs) {
+        throw new HttpException('Песня не найден', HttpStatus.NOT_FOUND);
+      }
     }
   }
 

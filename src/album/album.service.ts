@@ -15,12 +15,14 @@ export class AlbumService {
     return await this.albumRepository.find();
   }
 
-  public async getAlbumById(id: string): Promise<Album> {
+  public async getAlbumById(id: string, favs = false): Promise<Album> {
     const album = await this.albumRepository.findOne({ where: { id } });
     if (album) {
       return album;
     } else {
-      throw new HttpException('Альбом не найден', HttpStatus.NOT_FOUND);
+      if (!favs) {
+        throw new HttpException('Альбом не найден', HttpStatus.NOT_FOUND);
+      }
     }
   }
 

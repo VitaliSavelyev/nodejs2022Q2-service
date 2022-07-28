@@ -25,12 +25,14 @@ export class ArtistService {
     return await this.artistRepository.find();
   }
 
-  public async getArtistById(id: string): Promise<Artist> {
+  public async getArtistById(id: string, favs = false): Promise<Artist> {
     const artist = await this.artistRepository.findOne({ where: { id } });
     if (artist) {
       return artist;
     } else {
-      throw new HttpException('Артист не найден', HttpStatus.NOT_FOUND);
+      if (!favs) {
+        throw new HttpException('Артист не найден', HttpStatus.NOT_FOUND);
+      }
     }
   }
 
