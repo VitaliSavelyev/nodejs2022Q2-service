@@ -62,6 +62,5 @@ export class TrackService {
     if (result.affected === 0) {
       throw new HttpException('Песня не найден', HttpStatus.NOT_FOUND);
     }
-    // this.favsServise.removedFavsAfterDeleteElem(id, 'tracks');
   }
 }

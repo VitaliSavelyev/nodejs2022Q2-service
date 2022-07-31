@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {
   Album,
   Artist,
-  Favorites,
   FavoritesResponse,
   Track,
 } from '../interfaces/interfaces';

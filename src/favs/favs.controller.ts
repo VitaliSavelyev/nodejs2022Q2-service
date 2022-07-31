@@ -46,7 +46,6 @@ export class FavsController {
   @HttpCode(HttpStatus.CREATED)
   async addFavsArtist(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() artistId: string,
   ): Promise<Artist> {
     return await this.favsService.addFavsArtist(id);
   }
