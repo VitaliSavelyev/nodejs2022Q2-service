@@ -1,104 +1,38 @@
-version: '3'
+version: '3.8'
 services:
-  servernode:
-    container_name: servernode
-    image: servernode
-    build:
-      context: .
-      dockerfile: Dockerfile
-    networks:
-      - backend
+  node:
+    build: .
+    restart: always
     ports:
       - ${PORT}:${PORT}
     depends_on:
       - db
     volumes:
       - ./src:/app/src
-    environment:
-      - PORT=${PORT}
-      - LOG_LEVEL=${LOG_LEVEL}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - PGPORT=${PG_PORT}
-      - PGDATA=/var/lib/postgresql/data
-    restart: always
-    links:
-      - db
-  db:
-    container_name: postgresql
-    image: postgres:14.1-alpine
-    build:
-      context: ./database/
-      dockerfile: ../database/Dockerfile
     networks:
-      - backend
-    ports:
-      - ${PG_PORT}:${PG_PORT}
-    volumes:
-      - db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - PGPORT=${PG_PORT}
-      - PGDATA=/var/lib/postgresql/data
-    restart: always
-networks:
-  backend:
-    driver: bridge
-volumes:
-  db:
+      - app_net
 
-#version: '3.0'
-#
-#services:
-#  main:
-#    container_name: main
-#    image: main
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-#    environment:
-#      PORT: "${PORT}"
-#      POSTGRES_USER: "${POSTGRES_USER}"
-#      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-#      POSTGRES_HOST: postgres
-#      POSTGRES_PORT: "${POSTGRES_PORT}"
-#      POSTGRES_DB: "${POSTGRES_DB}"
-#    networks:
-#      - vitali-net
-#    network_mode: bridge
-#    volumes:
-#      - .:/usr/src/app
-#      - /usr/src/app/node_modules
-#    ports:
-#      - ${PORT}:${PORT}
-#    restart: always
-#    depends_on:
-#      - postgres
-#
-#  postgres:
-#    container_name: postgres
-#    image: postgres:14.1-alpine
-#    build: ./database/
-#    environment:
-#      POSTGRES_USER: ${POSTGRES_USER}
-#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#      POSTGRES_DB: ${POSTGRES_DB}
-#      PGPORT: ${POSTGRES_PORT}
-#      PG_DATA: /var/lib/postgresql/data
-#    networks:
-#      - vitali-net
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#    ports:
-#      - ${POSTGRES_PORT}:${POSTGRES_PORT}
-#    restart: always
-#
-#volumes:
-#  pgdata:
-#
-#networks:
-#  vitali-net:
-#    driver: bridge
+  db:
+    container_name: postgres
+    image: postgres:14.1-alpine
+    build: ./database/
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./:/usr/app
+    networks:
+      - app_net
+
+volumes:
+  data:
+
+networks:
+  app_net:
+    driver: bridge
