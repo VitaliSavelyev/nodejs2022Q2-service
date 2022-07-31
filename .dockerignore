@@ -1,0 +1,15 @@
+**/node_modules
+README.md
+**/Dockerfile
+docker-compose.yml
+build
+.editorconfig
+coverage
+npm-debug.log
+.git
+.github
+.idea
+dist
+logs
+pgdata
+.dockerignore
