@@ -59,12 +59,5 @@ export class AlbumService {
     if (result.affected === 0) {
       throw new HttpException('Альбом не найден', HttpStatus.NOT_FOUND);
     }
-    // this.trackService.setAlbumAfterDelete(id);
-    // this.favsServise.removedFavsAfterDeleteElem(id, 'albums');
-  }
-
-  public checkAlbum(id): Album | null {
-    const album: Album = [].find((album) => album.id === id);
-    return album;
   }
 }

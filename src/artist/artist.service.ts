@@ -1,15 +1,6 @@
-import {
-  forwardRef,
-  HttpException,
-  HttpStatus,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Artist, ArtistReq } from '../interfaces/interfaces';
-import { TrackService } from '../track/track.service';
-import { AlbumService } from '../album/album.service';
-import { FavsService } from '../favs/favs.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArtistEntity } from './entity/artist.entity';
 import { Repository } from 'typeorm';

@@ -22,7 +22,7 @@ export class FavsService {
     private readonly albumService: AlbumService,
     private readonly artistService: ArtistService,
   ) {
-    this.createFavs().then(() => console.log(1));
+    this.createFavs().then(() => console.log());
   }
 
   public async createFavs(): Promise<void> {
@@ -150,18 +150,6 @@ export class FavsService {
       );
     }
   }
-
-  // public removedFavsAfterDeleteElem(id: string, type: string): void {
-  //   if (type === 'artists') {
-  //     favs.artists = favs.artists.filter((elem) => elem !== id);
-  //   }
-  //   if (type === 'albums') {
-  //     favs.albums = favs.albums.filter((elem) => elem !== id);
-  //   }
-  //   if (type === 'tracks') {
-  //     favs.tracks = favs.tracks.filter((elem) => elem !== id);
-  //   }
-  // }
 
   private async setFavsResponse(fav: FavsEntity): Promise<FavoritesResponse> {
     const artists: Artist[] = await this.setFavsArtists(fav.artistsIds);
