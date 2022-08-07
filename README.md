@@ -70,3 +70,30 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+# Home Library Service
+## REST service: Containerization, Docker
+
+## Instruction
+
+```
+git clone git@github.com:VitaliSavelyev/nodejs2022Q2-service.git.
+cd nodejs2022Q2-service
+git checkout task7-docker  Здесь вставить свою ветку.
+```
+
+## Running application
+
+```
+npm run docker
+```
+
+## Scanning
+Scan application
+```
+npm run docker:scan:node.
+```
+Scan database
+```
+npm run docker:scan:db.
+```

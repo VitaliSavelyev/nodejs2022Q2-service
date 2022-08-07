@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  node:
+    build: .
+    restart: always
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+    networks:
+      - app_net
+
+  db:
+    container_name: postgres
+    image: postgres:14.1-alpine
+    build: ./database/
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./:/usr/app
+    networks:
+      - app_net
+
+volumes:
+  data:
+
+networks:
+  app_net:
+    driver: bridge
