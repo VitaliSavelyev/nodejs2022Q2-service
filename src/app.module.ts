@@ -13,6 +13,7 @@ import { LoggerMiddleware } from './logger/logger-middleware/logger.middleware';
 import { LoggerModule } from './logger/logger.module';
 import { APP_FILTER } from '@nestjs/core';
 import { MyExceptionFilter } from './logger/myException.filter';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MyExceptionFilter } from './logger/myException.filter';
     LoggerModule,
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../.env' }),
     TypeOrmModule.forRoot(configService),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
