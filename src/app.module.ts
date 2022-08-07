@@ -11,6 +11,8 @@ import { ConfigModule } from '@nestjs/config';
 import configService from './ormconfig';
 import { LoggerMiddleware } from './logger/logger-middleware/logger.middleware';
 import { LoggerModule } from './logger/logger.module';
+import { APP_FILTER } from '@nestjs/core';
+import { MyExceptionFilter } from './logger/myException.filter';
 
 @Module({
   imports: [
@@ -24,7 +26,13 @@ import { LoggerModule } from './logger/logger.module';
     TypeOrmModule.forRoot(configService),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: MyExceptionFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
